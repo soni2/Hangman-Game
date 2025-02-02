@@ -1,4 +1,5 @@
-import usePuntos from "../Hooks/usePuntos";
+// import usePuntos from "../Hooks/usePuntos";
+import { useGameStore } from "../Hooks/store";
 
 const style = {
   width: "100%",
@@ -7,7 +8,8 @@ const style = {
 };
 
 const Hangman = () => {
-  const { puntos, over, won } = usePuntos();
+  // const { puntos, over, won } = usePuntos();
+  const { puntos, over, won } = useGameStore();
 
   return (
     <svg

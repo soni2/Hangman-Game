@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import usePuntos from "../Hooks/usePuntos";
+import { fetchWord } from "../Hooks/fetchWords";
+// import usePuntos from "../Hooks/usePuntos";
 
 export default function Intro() {
-  const { setGame } = usePuntos();
+  // const { setGame } = usePuntos()
 
   const [turnRed, setTurnRed] = useState<boolean>(false);
 
@@ -57,7 +58,7 @@ export default function Intro() {
           return (
             <button
               key={i}
-              onClick={() => setGame(e.category)}
+              onClick={() => fetchWord(e.category)}
               className="px-8 py-2 rounded-none border-white transition-all duration-300 ease-in-out capitalize"
             >
               {e.name}

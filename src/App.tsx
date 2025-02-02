@@ -1,12 +1,14 @@
 import "./App.css";
-import usePuntos from "./Hooks/usePuntos";
+// import usePuntos from "./Hooks/usePuntos";
 import Intro from "./Components/Intro";
 import Modal from "./Components/Modal";
 import MainGame from "./Components/MainGame";
+import { useGameStore } from "./Hooks/store";
 
 function App() {
   //Hooks
-  const { gameStarted, over, meaningModal, meaning, won } = usePuntos();
+  // const { gameStarted, over, meaningModal, meaning, won } = usePuntos();
+  const { gameStarted, over, meaningModal, meaning, won } = useGameStore();
 
   //Main App
   return (

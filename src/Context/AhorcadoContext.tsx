@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useState,
-  ReactNode,
-  FC,
-  useEffect,
-} from "react";
+import React, { createContext, useState, ReactNode, FC } from "react";
 
 //Interfaces
 interface AhorcadoContextType {
@@ -53,14 +47,12 @@ export const AhorcadoProvider: FC<AhorcadoProviderProps> = ({ children }) => {
   //Main game function
   function addPoints() {
     if (puntos === 6) return;
-    setPoints((a) => a + 1);
+    setPoints((prev) => {
+      const newPoints = prev + 1;
+      if (newPoints === 6) setOver(true);
+      return newPoints;
+    });
   }
-
-  useEffect(() => {
-    if (puntos === 6) {
-      setOver(true);
-    }
-  }, [puntos]);
 
   //initial function
   async function fetchWords(dif: string) {
@@ -113,12 +105,10 @@ export const AhorcadoProvider: FC<AhorcadoProviderProps> = ({ children }) => {
   }
 
   function resetGame() {
-    // setGameStarted(false);
     fetchWords(difficulty);
     setPoints(0);
     setWord("");
     setGuess([]);
-    // setWon(false);
   }
 
   function homeScreen() {
@@ -126,19 +116,16 @@ export const AhorcadoProvider: FC<AhorcadoProviderProps> = ({ children }) => {
     setPoints(0);
     setWord("");
     setGuess([]);
-    // setWon(false);
   }
 
   const splitWord = word.split("");
 
   function letterSuggestion(a: string) {
-    if (splitWord.includes(a)) {
-      setGuess(() => [...guess, a]);
-    }
-    if (!splitWord.includes(a)) {
-      addPoints();
-      setGuess(() => [...guess, a]);
-    }
+    setGuess((prev) => {
+      if (prev.includes(a)) return prev;
+      return [...prev, a];
+    });
+    if (!splitWord.includes(a)) addPoints();
   }
 
   function toggleMeaningModal() {
@@ -150,9 +137,7 @@ export const AhorcadoProvider: FC<AhorcadoProviderProps> = ({ children }) => {
 
   function toggleWon() {
     setWon(true);
-    setTimeout(() => {
-      setWon(false);
-    }, 4000);
+    setTimeout(() => setWon(false), 4000);
   }
 
   return (

@@ -1,19 +1,24 @@
 import { Tooltip } from "react-tooltip";
 import QuestionMark from "../Components/QuestionMark";
 import RefreshIcon from "../Components/Refresh";
-import usePuntos from "../Hooks/usePuntos";
+// import usePuntos from "../Hooks/usePuntos";
 import House from "./House";
+import { useGameStore } from "../Hooks/store";
 
 export default function Keyboard() {
-  const {
-    resetGame,
-    letterSuggestion,
-    over,
-    guess,
-    splitWord,
-    homeScreen,
-    toggleMeaningModal,
-  } = usePuntos();
+  // const {
+  //   resetGame,
+  //   letterSuggestion,
+  //   over,
+  //   guess,
+  //   splitWord,
+  //   homeScreen,
+  //   toggleMeaningModal,
+  // } = usePuntos();
+
+  const { guess, over, splitWord } = useGameStore();
+  const { resetGame, letterSuggestion, homeScreen, toggleMeaningModal } =
+    useGameStore();
 
   //Alphabet
   const alpha = Array.from(Array(26)).map((_e, i) => i + 65);
@@ -34,7 +39,7 @@ export default function Keyboard() {
         {alphabet.map((e, i) => {
           // const letras = alphabet.length;
           const used = guess.includes(e);
-          const included = splitWord.includes(e);
+          const included = splitWord()?.includes(e);
 
           return (
             <button

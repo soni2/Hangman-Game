@@ -1,15 +1,19 @@
 import { useEffect } from "react";
-import usePuntos from "../Hooks/usePuntos";
+// import usePuntos from "../Hooks/usePuntos";
 import HangMan from "./Hangman";
 import Keyboard from "./Keyboard";
+import { useGameStore } from "../Hooks/store";
 
 export default function MainGame() {
-  const { splitWord, guess, over, toggleWon } = usePuntos();
+  // const { splitWord, guess, over, toggleWon } = usePuntos();
+
+  const { word, guess, over, splitWord } = useGameStore();
+  const { setWon } = useGameStore();
 
   useEffect(() => {
-    if (splitWord.length > 0) {
-      if (splitWord.every((item) => guess.includes(item))) {
-        toggleWon();
+    if (word.length > 0) {
+      if (splitWord()?.every((item: string) => guess.includes(item))) {
+        setWon(true);
       }
     }
   }, [guess]);
@@ -19,7 +23,7 @@ export default function MainGame() {
 
       <div className="flex items-center justify-center flex-col">
         <div className="grid grid-flow-col gap-8 pb-4">
-          {splitWord.map((e, i) => {
+          {splitWord()?.map((e: string, i: number) => {
             if (guess.includes(e)) return <h1 key={i}>{e}</h1>;
             if (!guess.includes(e) && over)
               return (
