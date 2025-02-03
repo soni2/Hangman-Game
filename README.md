@@ -1,6 +1,8 @@
 # Hanged Game
 
-Este es un juego de adivinación de palabras, el objetivo es adivinar la palabra antes de que te ahorcen.
+## Descripción
+
+Un juego donde tienes que adivinar la palabra en menos de 6 intentos.
 
 ## Tecnologías
 

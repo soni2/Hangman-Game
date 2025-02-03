@@ -1,24 +1,20 @@
 import { Tooltip } from "react-tooltip";
 import QuestionMark from "../Components/QuestionMark";
 import RefreshIcon from "../Components/Refresh";
-// import usePuntos from "../Hooks/usePuntos";
+import usePuntos from "../Hooks/usePuntos";
 import House from "./House";
-import { useGameStore } from "../Hooks/store";
 
 export default function Keyboard() {
-  // const {
-  //   resetGame,
-  //   letterSuggestion,
-  //   over,
-  //   guess,
-  //   splitWord,
-  //   homeScreen,
-  //   toggleMeaningModal,
-  // } = usePuntos();
-
-  const { guess, over, splitWord } = useGameStore();
-  const { resetGame, letterSuggestion, homeScreen, toggleMeaningModal } =
-    useGameStore();
+  const {
+    resetGame,
+    letterSuggestion,
+    over,
+    guess,
+    splitWord,
+    won,
+    homeScreen,
+    toggleMeaningModal,
+  } = usePuntos();
 
   //Alphabet
   const alpha = Array.from(Array(26)).map((_e, i) => i + 65);
@@ -37,21 +33,25 @@ export default function Keyboard() {
       </Tooltip>
       <div className="grid grid-cols-6 justify-center w-fit gap-2">
         {alphabet.map((e, i) => {
-          // const letras = alphabet.length;
           const used = guess.includes(e);
-          const included = splitWord()?.includes(e);
+          const included = splitWord?.includes(e);
 
           return (
             <button
               key={i}
               className={`${
-                used || (over && "text-gray-500 cursor-not-allowed")
-              } ${used && included && "bg-green-400 text-black"}
-              ${used && !included && "bg-red-600 text-white"}
-              px-2 py-2 text-dark-blue dark:text-white
-              `}
+                used && included
+                  ? "bg-green-400 text-black"
+                  : used && !included
+                  ? "bg-red-600 text-white"
+                  : over || won
+                  ? "text-gray-500 dark:text-gray-500 cursor-not-allowed"
+                  : "text-dark-blue dark:text-white"
+              }
+                  px-2 py-2
+                  `}
               onClick={() => letterSuggestion(e)}
-              disabled={used || over}
+              disabled={used || over || won}
             >
               {e}
             </button>

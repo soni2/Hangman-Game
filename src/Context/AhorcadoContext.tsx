@@ -49,7 +49,7 @@ export const AhorcadoProvider: FC<AhorcadoProviderProps> = ({ children }) => {
     if (puntos === 6) return;
     setPoints((prev) => {
       const newPoints = prev + 1;
-      if (newPoints === 6) setOver(true);
+      if (newPoints >= 6) setOver(true);
       return newPoints;
     });
   }
@@ -58,43 +58,49 @@ export const AhorcadoProvider: FC<AhorcadoProviderProps> = ({ children }) => {
   async function fetchWords(dif: string) {
     setDifficulty(dif);
 
-    await fetch(`${wordKey}/${dif}`)
-      .then((res) => res.json())
-      .then((res) => {
-        setPoints(0);
-        setGameStarted(true);
-        setWord(
-          res[0]
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .toUpperCase()
+    try {
+      const url = `${wordKey}/${dif}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (!data) throw new Error("Problema obteniendo la palabra");
+
+      const fetchedWord = data[0]
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toUpperCase();
+
+      setPoints(0);
+      setGameStarted(true);
+      setWord(fetchedWord);
+
+      await fetchMeaning(fetchedWord);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function fetchMeaning(res: string) {
+    try {
+      const url = `${meaningKey}/api/words/${res.toLowerCase()}`;
+
+      const response = await fetch(url);
+      const { data } = await response.json();
+
+      const fetchedMeaning = data?.meanings[0].senses[0].raw;
+
+      if (!fetchedMeaning)
+        setMeaning(
+          "Lo sentimos, no pudimos encontrar el significado de la palabra."
         );
 
-        setOver(false);
-
-        return res[0].toLowerCase();
-      })
-      .then((res) => {
-        const url = `${meaningKey}/api/words/${res.toLowerCase()}`;
-
-        const fetchMeaning = async () => {
-          await fetch(url)
-            .then((res) => res.json())
-            .then((res) => {
-              const data = res.data.meanings[0].senses[0].raw;
-
-              setMeaning(data);
-            })
-            .catch((error) => {
-              console.log(error);
-              setMeaning(
-                "Lo sentimos, no pudimos encontrar el significado de la palabra"
-              );
-            });
-        };
-
-        fetchMeaning();
-      });
+      setMeaning(fetchedMeaning);
+    } catch (error) {
+      console.error(error);
+      setMeaning(
+        "Lo sentimos, no pudimos encontrar el significado de la palabra."
+      );
+    }
   }
 
   //functions
@@ -105,6 +111,8 @@ export const AhorcadoProvider: FC<AhorcadoProviderProps> = ({ children }) => {
   }
 
   function resetGame() {
+    setWon(false);
+    setOver(false);
     fetchWords(difficulty);
     setPoints(0);
     setWord("");
@@ -112,6 +120,8 @@ export const AhorcadoProvider: FC<AhorcadoProviderProps> = ({ children }) => {
   }
 
   function homeScreen() {
+    setWon(false);
+    setOver(false);
     setGameStarted(false);
     setPoints(0);
     setWord("");
@@ -136,8 +146,8 @@ export const AhorcadoProvider: FC<AhorcadoProviderProps> = ({ children }) => {
   }
 
   function toggleWon() {
+    setOver(true);
     setWon(true);
-    setTimeout(() => setWon(false), 4000);
   }
 
   return (

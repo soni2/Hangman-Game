@@ -1,5 +1,4 @@
-// import usePuntos from "../Hooks/usePuntos";
-import { useGameStore } from "../Hooks/store";
+import usePuntos from "../Hooks/usePuntos";
 
 const style = {
   width: "100%",
@@ -8,8 +7,7 @@ const style = {
 };
 
 const Hangman = () => {
-  // const { puntos, over, won } = usePuntos();
-  const { puntos, over, won } = useGameStore();
+  const { puntos, over, won } = usePuntos();
 
   return (
     <svg
@@ -18,11 +16,6 @@ const Hangman = () => {
       viewBox="0 0 400 400"
       style={style}
     >
-      {/* <style>
-        {`.st0{fill:none;stroke:${
-          puntos !== 6 ? "#000000" : "#f90000"
-        };stroke-width:12;stroke-miterlimit:10}`}
-      </style> */}
       <g id="Layer_2">
         <path
           d="M68.9 333.8h118.7M128.2 333.8V66.2h153.6V104M177.9 66.2 126.1 118"
