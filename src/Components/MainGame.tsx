@@ -5,7 +5,8 @@ import { motion } from "framer-motion";
 import usePuntos from "../Hooks/usePuntos";
 
 export default function MainGame() {
-  const { guess, over, splitWord, toggleWon } = usePuntos();
+  const { guess, over, splitWord } = usePuntos();
+  const { toggleWon } = usePuntos();
 
   useEffect(() => {
     if (splitWord?.length > 0) {

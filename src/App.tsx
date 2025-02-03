@@ -3,10 +3,12 @@ import usePuntos from "./Hooks/usePuntos";
 import Intro from "./Components/Intro";
 import Modal from "./Components/Modal";
 import MainGame from "./Components/MainGame";
+import Loading from "./Components/Loading";
 
 function App() {
   //Hooks
-  const { gameStarted, over, meaningModal, meaning, won } = usePuntos();
+  const { gameStarted, over, meaningModal, meaning, won, loading } =
+    usePuntos();
 
   //Main App
   return (
@@ -25,7 +27,7 @@ function App() {
               modalType="alert"
             />
           )}
-          <MainGame />
+          {!loading ? <Loading /> : <MainGame />}
         </>
       )}
     </>

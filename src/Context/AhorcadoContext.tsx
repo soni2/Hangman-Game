@@ -18,6 +18,7 @@ interface AhorcadoContextType {
   meaningModal: boolean;
   toggleWon: () => void;
   won: boolean;
+  loading: boolean;
 }
 
 interface AhorcadoProviderProps {
@@ -43,6 +44,7 @@ export const AhorcadoProvider: FC<AhorcadoProviderProps> = ({ children }) => {
   const [difficulty, setDifficulty] = useState<string>("easy");
   const [meaningModal, setMeaningModal] = useState<boolean>(false);
   const [won, setWon] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   //Main game function
   function addPoints() {
@@ -57,6 +59,7 @@ export const AhorcadoProvider: FC<AhorcadoProviderProps> = ({ children }) => {
   //initial function
   async function fetchWords(dif: string) {
     setDifficulty(dif);
+    setLoading(true);
 
     try {
       const url = `${wordKey}/${dif}`;
@@ -95,8 +98,10 @@ export const AhorcadoProvider: FC<AhorcadoProviderProps> = ({ children }) => {
         );
 
       setMeaning(fetchedMeaning);
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
       setMeaning(
         "Lo sentimos, no pudimos encontrar el significado de la palabra."
       );
@@ -169,6 +174,7 @@ export const AhorcadoProvider: FC<AhorcadoProviderProps> = ({ children }) => {
         meaningModal,
         toggleWon,
         won,
+        loading,
       }}
     >
       {children}
