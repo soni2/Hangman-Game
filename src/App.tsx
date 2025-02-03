@@ -27,7 +27,7 @@ function App() {
               modalType="alert"
             />
           )}
-          {!loading ? <Loading /> : <MainGame />}
+          {loading ? <Loading /> : <MainGame />}
         </>
       )}
     </>
