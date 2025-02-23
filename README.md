@@ -23,8 +23,6 @@ npm install
 npm run dev
 ```
 
-## Despliegue
+## Demo
 
-```bash
-npm run build
-```
+[Link](http://soni2.github.io/Hangman-Game)
